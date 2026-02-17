@@ -1,0 +1,11 @@
+node_modules/
+build/
+
+# OAuth secrets
+credentials.json
+credentials.*
+token*.json
+accounts.json
+
+# Runtime output
+summary.json

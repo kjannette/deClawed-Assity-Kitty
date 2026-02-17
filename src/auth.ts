@@ -1,0 +1,92 @@
+import { google } from "googleapis";
+import fs from "fs";
+import path from "path";
+import readline from "readline";
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const PROJECT_ROOT = path.resolve(__dirname, "..");
+const CREDENTIALS_PATH = path.join(PROJECT_ROOT, "credentials.json");
+const TOKEN_PATH = path.join(PROJECT_ROOT, "token.json");
+
+// Gmail modify scope: read, send, delete, and manage labels
+const SCOPES = ["https://www.googleapis.com/auth/gmail.modify"];
+
+async function authorize(): Promise<void> {
+  if (!fs.existsSync(CREDENTIALS_PATH)) {
+    console.error(
+      `Missing ${CREDENTIALS_PATH}\n\n` +
+        "To create this file:\n" +
+        "1. Go to https://console.cloud.google.com/\n" +
+        "2. Create a project and enable the Gmail API\n" +
+        "3. Create OAuth 2.0 credentials (Desktop app type)\n" +
+        "4. Download the JSON and save it as credentials.json in the project root\n"
+    );
+    process.exit(1);
+  }
+
+  const credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH, "utf-8"));
+  const { client_id, client_secret, redirect_uris } =
+    credentials.installed || credentials.web;
+
+  const oAuth2Client = new google.auth.OAuth2(
+    client_id,
+    client_secret,
+    redirect_uris[0]
+  );
+
+  // Check if we already have a valid token
+  if (fs.existsSync(TOKEN_PATH)) {
+    const token = JSON.parse(fs.readFileSync(TOKEN_PATH, "utf-8"));
+    oAuth2Client.setCredentials(token);
+    console.log("Token already exists at:", TOKEN_PATH);
+    console.log("To re-authorize, delete token.json and run this script again.");
+    return;
+  }
+
+  // Generate auth URL and prompt user
+  const authUrl = oAuth2Client.generateAuthUrl({
+    access_type: "offline",
+    scope: SCOPES,
+    prompt: "consent",
+  });
+
+  console.log("Authorize this app by visiting this URL:\n");
+  console.log(authUrl);
+  console.log();
+
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  const rawInput = await new Promise<string>((resolve) => {
+    rl.question(
+      "Paste the FULL URL from your browser address bar (or just the code): ",
+      (answer) => {
+        rl.close();
+        resolve(answer.trim());
+      }
+    );
+  });
+
+  // Extract the code whether they pasted the full URL or just the code
+  let code = rawInput;
+  if (rawInput.includes("code=")) {
+    const url = new URL(rawInput);
+    code = url.searchParams.get("code") ?? rawInput;
+  }
+
+  console.log(`\nExtracted code: ${code.substring(0, 10)}...`);
+
+  const { tokens } = await oAuth2Client.getToken(code);
+  oAuth2Client.setCredentials(tokens);
+
+  fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokens, null, 2));
+  console.log("\nToken saved to:", TOKEN_PATH);
+  console.log("You can now start the MCP server.");
+}
+
+authorize().catch((err) => {
+  console.error("Authorization failed:", err);
+  process.exit(1);
+});
