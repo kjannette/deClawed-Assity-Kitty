@@ -803,7 +803,7 @@ server.registerTool(
 );
 
 // ---------------------------------------------------------------------------
-// Start server
+// Import and Start server
 // ---------------------------------------------------------------------------
 async function main(): Promise<void> {
   const transport = new StdioServerTransport();
