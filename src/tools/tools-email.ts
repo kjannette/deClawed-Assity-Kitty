@@ -13,7 +13,7 @@ import {
 // ---------------------------------------------------------------------------
 // Email parsing helpers
 // ---------------------------------------------------------------------------
-const getHeader = (
+export const getHeader = (
   headers: gmail_v1.Schema$MessagePartHeader[] | undefined,
   name: string
 ): string => {
@@ -24,7 +24,7 @@ const getHeader = (
   return header?.value ?? "";
 };
 
-const decodeBody = (message: gmail_v1.Schema$Message): string => {
+export const decodeBody = (message: gmail_v1.Schema$Message): string => {
   const parts = message.payload?.parts;
   let encoded = "";
 
