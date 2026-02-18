@@ -1,29 +1,30 @@
 <p align="center">
-  <img src="assets/logo.png" alt="Declawed" width="120" />
+ <img src="assets/logo.png" alt="Declawed" width="120" />
 </p>
 
 # Declawed
 
 ###  A configurable, prompt purrr-fectable LLM mail management assisty-kitty.
-###  Perfect for tedious job hunts – you know the ones – it feels like the process is driving *you*. 
-###  Whirks whiskerous wonders in forums where the worthwhile posts are solid-gold but only 10% total volume, vs 90% masturbatory, gregarious BS.x
+###  Perfect for tedious job hunts – you know the ones – it feels like the process is driving *you*.
+###  Whirks whiskerous wonders for  forums where good posts are solid-gold but only 10% total volume, vs 90% gregarious noise.
+### With some prompt purrfection and playful experimentation, helps any inbox where you need to cut adjust signal/noise to hone in, and take action on real opportunities,
 ###  (Cat) nip that sh*t in the bud.
 
 # Secure
-A local Model Context Protocol (MCP) server integrates an  LLM API, a local model, or whatever your nine lives desire. Security/privacy configs and other nasty gotcha grlimins  are not lurking in a supply chain black-box.
+A local Model Context Protocol (MCP) server integrates an  LLM API, a local model, or whatever your nine lives desire. Questionable security, privacy holes or nasties are not lurking in an opaque supply-chain.
 
 # Cat-o-matic
-The library easily interfaces with your mail and calendar app APIs, or about any other service you want to plug in... it keeps things moving while you chase your tail or take a 19-hour nap in a sunbeam.
+The library easily interfaces with your mail and calendar app APIs, or about any other service you want to plug in... keeping your adulting  moving forward while you chase your tail or take a 19-hour nap in a sunbeam.
 
 ---
 
 # Scope and Architecture
 
 ## Current implementation contemplates:
- -- Claude Desktop (plugging in your choice of  LLM to our framework should be easy. Plus we'll be building our own UI soon-ishh).
- -- A Custom Local Model Context Protocol Server
- -- A DNS-config’d domain, with MX records pointing to:
- -- A commercial or self-hosted SMTP Server (with a sensible API)
+-- Claude Desktop (plugging in your choice of  LLM to our framework should be easy. Plus we'll be building our own UI soon-ishh).
+-- A Custom Local Model Context Protocol Server
+-- A DNS-config’d domain, with MX records pointing to:
+-- A commercial or self-hosted SMTP Server (with a sensible API)
 
 ---
 
@@ -94,16 +95,16 @@ Create `accounts.json` in the project root. Each key is an account alias with it
 
 ```json
 {
- "work": {
-   "label": "you@yourdomain.com",
-   "tokenFile": "token.json",
-   "spreadsheetId": "YOUR_GOOGLE_SHEET_ID",
-   "calendarId": "primary"
- },
- "secondary": {
-   "label": "you@gmail.com",
-   "tokenFile": "token-secondary.json"
- }
+"work": {
+  "label": "you@yourdomain.com",
+  "tokenFile": "token.json",
+  "spreadsheetId": "YOUR_GOOGLE_SHEET_ID",
+  "calendarId": "primary"
+},
+"secondary": {
+  "label": "you@gmail.com",
+  "tokenFile": "token-secondary.json"
+}
 }
 ```
 
@@ -164,14 +165,14 @@ Add the server:
 
 ```json
 {
- "mcpServers": {
-   "assistant": {
-     "command": "/ABSOLUTE/PATH/TO/node",
-     "args": [
-       "/ABSOLUTE/PATH/TO/deClawed-Assity-Kitty/build/index.js"
-     ]
-   }
- }
+"mcpServers": {
+  "assistant": {
+    "command": "/ABSOLUTE/PATH/TO/node",
+    "args": [
+      "/ABSOLUTE/PATH/TO/deClawed-Assity-Kitty/build/index.js"
+    ]
+  }
+}
 }
 ```
 
@@ -275,6 +276,3 @@ deClawed-Assity-Kitty/
 ├── vitest.config.ts
 └── README.md
 ```
-
-
-
