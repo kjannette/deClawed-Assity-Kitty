@@ -1,0 +1,45 @@
+PHASE 2: TAKE ACTION ON CATEGORY B EMAILS
+
+After completing classification (Phase 1), perform the following actions for each email classified as Category B (Advancement to Next Step).
+
+STEP 1: LOG TO SPREADSHEET
+For each Category B email, extract as much of the following information as possible from the email contents and log it using the log_recruiter_contact tool:
+
+A column exists for:
+
+- Recruiter Name
+- Recruiter Email
+- Recruiter Phone/Tel
+- Company/Role the recruiter seeks to fill
+- First Contact: the date and time the email was received
+- Subsequent Contacts: any follow-up communication with this recruiter about this role
+- Recruiter Call Scheduled: if the email contains scheduling information, extract ALL details — date, time, platform (Zoom, MS Teams, Google Meet, etc.), meeting link, phone number to call — and note whether they confirm having your cell number or might not have it
+
+A row should already exists for the same recruiter email + company/role combination (from a previous email), the tool will UPDATE the existing row. Provide all available fields and the tool handles merging.
+
+STEP 2: CREATE CALENDAR EVENTS
+Immediately after logging to the spreadsheet, check whether ANY of these fields were populated or updated:
+- Recruiter Call Scheduled
+- Company First Interview
+- Company Second Interview
+
+For EACH of the aboce fields that contains a date/time, create a Google Calendar event using the create_calendar_event tool:
+- Title format: "[<Recruiter NaME> Call] Company - Role" or "[First Interview] Company - Role" or "[Second Interview] Company - Role"
+- Start date/time: extracted from the email (convert to ISO 8601)
+- Duration: 30 minutes unless otherwise specified in the email
+- Location: the video meeting link, phone number, or platform name
+- Description: include recruiter or company contact name/email/phone, and note whether they have your cell number
+
+STEP 3: COMPANY INTERVIEW TRACKING
+When an email indicates advancement beyond the recruiter screen to a company interview:
+- Populate the Company First Interview or Company Second Interview field with details
+- Those details should include company contact info (interviewer name, email, phone)
+- Then immeidately create a calendar event for the new interview date/time including interviewer name, email, phone
+
+STRICT CONSTRAINTS:
+- Do not make up phone numbers, links, dates, or anything at all.  If it does not exist in text wihtin a verifiable email, IT DOES NOT EXIST.
+- As described in more detail below, each new date/time value in a scheduling column = one new calendar event. Never skip this.
+- Always use the same account for calendar events as was used for email fetching.
+- Do not create duplicate calendar events for the same meeting.
+- If information is not present in the email, leave that field empty do ot guess.
+

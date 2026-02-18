@@ -21,10 +21,11 @@ The email does not fit into categories A, B, or C. This includes non-job-applica
 
 STEP 3: DELETE emails classified as Category A and Category C.
 
-STEP 4: SUMMARIZE emails classified as Category B and Category D. For each, include:
+STEP 4: ("Anti step") -  NEVER DELETE Category B emails.
+
+STEP 5: SUMMARIZE emails classified as Category B and Category D. For each, include:
 1. Sender name and email address
 2. Email subject line
 3. Date and time received
 4. Category (B or D)
 5. Suggested action I should take
-

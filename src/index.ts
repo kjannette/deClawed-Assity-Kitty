@@ -1,7 +1,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { google, gmail_v1 } from "googleapis";
+import { google, gmail_v1, sheets_v4, calendar_v3 } from "googleapis";
+import { OAuth2Client } from "google-auth-library";
 import fs from "fs";
 import path from "path";
 
@@ -13,7 +14,10 @@ const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 const CREDENTIALS_PATH = path.join(PROJECT_ROOT, "credentials.json");
 const ACCOUNTS_PATH = path.join(PROJECT_ROOT, "accounts.json");
-const PROMPT_PATH = path.join(PROJECT_ROOT, "classify-emails.txt");
+const CLASSIFY_PROMPT_PATH = path.join(PROJECT_ROOT, "classify-emails.txt");
+const ACTION_PROMPT_PATH = path.join(
+  PROJECT_ROOT, "src", "prompts", "take-action-on-emails.txt"
+);
 
 // ---------------------------------------------------------------------------
 // Account configuration
@@ -21,6 +25,8 @@ const PROMPT_PATH = path.join(PROJECT_ROOT, "classify-emails.txt");
 interface AccountConfig {
   label: string;
   tokenFile: string;
+  spreadsheetId?: string;
+  calendarId?: string;
 }
 
 interface AccountsMap {
@@ -63,20 +69,28 @@ const accountSchema = z
   .describe(`Which email account to use: ${accountDescription}`);
 
 // ---------------------------------------------------------------------------
-// Load classification prompt
+// Prompt loaders
 // ---------------------------------------------------------------------------
-function loadClassificationPrompt(): string {
-  if (!fs.existsSync(PROMPT_PATH)) {
-    console.error(`Warning: ${PROMPT_PATH} not found. Classification instructions will be missing.`);
+function loadPromptFile(filePath: string, label: string): string {
+  if (!fs.existsSync(filePath)) {
+    console.error(`Warning: ${filePath} not found. ${label} will be missing.`);
     return "";
   }
-  return fs.readFileSync(PROMPT_PATH, "utf-8");
+  return fs.readFileSync(filePath, "utf-8");
+}
+
+function loadClassificationPrompt(): string {
+  return loadPromptFile(CLASSIFY_PROMPT_PATH, "Classification instructions");
+}
+
+function loadActionPrompt(): string {
+  return loadPromptFile(ACTION_PROMPT_PATH, "Action instructions");
 }
 
 // ---------------------------------------------------------------------------
-// Gmail auth helper — parameterized by account key
+// Auth helpers — generic OAuth2 client, then service-specific factories
 // ---------------------------------------------------------------------------
-function getGmailClient(account: string): gmail_v1.Gmail {
+function getOAuth2Client(account: string): OAuth2Client {
   const tokenPath = getTokenPath(account);
 
   if (!fs.existsSync(CREDENTIALS_PATH)) {
@@ -103,7 +117,6 @@ function getGmailClient(account: string): gmail_v1.Gmail {
   const token = JSON.parse(fs.readFileSync(tokenPath, "utf-8"));
   oAuth2Client.setCredentials(token);
 
-  // Persist refreshed tokens automatically
   oAuth2Client.on("tokens", (newTokens) => {
     const current = JSON.parse(fs.readFileSync(tokenPath, "utf-8"));
     fs.writeFileSync(
@@ -113,7 +126,33 @@ function getGmailClient(account: string): gmail_v1.Gmail {
     console.error(`Token refreshed and saved for account "${account}".`);
   });
 
-  return google.gmail({ version: "v1", auth: oAuth2Client });
+  return oAuth2Client;
+}
+
+function getGmailClient(account: string): gmail_v1.Gmail {
+  return google.gmail({ version: "v1", auth: getOAuth2Client(account) });
+}
+
+function getSheetsClient(account: string): sheets_v4.Sheets {
+  return google.sheets({ version: "v4", auth: getOAuth2Client(account) });
+}
+
+function getCalendarClient(account: string): calendar_v3.Calendar {
+  return google.calendar({ version: "v3", auth: getOAuth2Client(account) });
+}
+
+function getSpreadsheetId(account: string): string {
+  const acct = accounts[account];
+  if (!acct?.spreadsheetId || acct.spreadsheetId === "PASTE_YOUR_SHEET_ID_HERE") {
+    throw new Error(
+      `No spreadsheetId configured for account "${account}" in accounts.json.`
+    );
+  }
+  return acct.spreadsheetId;
+}
+
+function getCalendarId(account: string): string {
+  return accounts[account]?.calendarId ?? "primary";
 }
 
 // ---------------------------------------------------------------------------
@@ -171,10 +210,11 @@ server.registerPrompt(
   "review_emails",
   {
     description:
-      `Review WORK inbox (${accounts.work?.label ?? "work"}): classify job application emails (A/B/C/D), delete A+C, summarize B+D.`,
+      `Review WORK inbox (${accounts.work?.label ?? "work"}): classify emails, delete A+C, summarize B+D, log B to spreadsheet, create calendar events.`,
   },
   () => {
-    const instructions = loadClassificationPrompt();
+    const phase1 = loadClassificationPrompt();
+    const phase2 = loadActionPrompt();
     return {
       messages: [
         {
@@ -183,8 +223,8 @@ server.registerPrompt(
             type: "text" as const,
             text:
               `ACCOUNT: Use account = "work" for ALL tool calls in this session.\n\n` +
-              (instructions ||
-                "Review my new emails and classify them by job application category."),
+              (phase1 || "Review my new emails and classify them by job application category.") +
+              (phase2 ? `\n\n${phase2}` : ""),
           },
         },
       ],
@@ -199,10 +239,11 @@ server.registerPrompt(
   "review_secondary_emails",
   {
     description:
-      `Review SECONDARY inbox (${accounts.secondary?.label ?? "secondary"}): classify job application emails (A/B/C/D), delete A+C, summarize B+D.`,
+      `Review SECONDARY inbox (${accounts.secondary?.label ?? "secondary"}): classify emails, delete A+C, summarize B+D, log B to spreadsheet, create calendar events.`,
   },
   () => {
-    const instructions = loadClassificationPrompt();
+    const phase1 = loadClassificationPrompt();
+    const phase2 = loadActionPrompt();
     return {
       messages: [
         {
@@ -211,8 +252,8 @@ server.registerPrompt(
             type: "text" as const,
             text:
               `ACCOUNT: Use account = "secondary" for ALL tool calls in this session.\n\n` +
-              (instructions ||
-                "Review my new emails and classify them by job application category."),
+              (phase1 || "Review my new emails and classify them by job application category.") +
+              (phase2 ? `\n\n${phase2}` : ""),
           },
         },
       ],
@@ -288,9 +329,14 @@ server.registerTool(
       }
 
       const classificationInstructions = loadClassificationPrompt();
-      const instructionsBlock = classificationInstructions
-        ? `\n\n${"=".repeat(60)}\nCLASSIFICATION INSTRUCTIONS:\n${"=".repeat(60)}\n${classificationInstructions}`
-        : "";
+      const actionInstructions = loadActionPrompt();
+      const instructionsBlock =
+        (classificationInstructions
+          ? `\n\n${"=".repeat(60)}\nCLASSIFICATION INSTRUCTIONS (PHASE 1):\n${"=".repeat(60)}\n${classificationInstructions}`
+          : "") +
+        (actionInstructions
+          ? `\n\n${"=".repeat(60)}\nACTION INSTRUCTIONS (PHASE 2):\n${"=".repeat(60)}\n${actionInstructions}`
+          : "");
 
       return {
         content: [
@@ -468,6 +514,273 @@ server.registerTool(
           {
             type: "text" as const,
             text: `Error appending to summary: ${errMsg}`,
+          },
+        ],
+      };
+    }
+  }
+);
+
+// ---------------------------------------------------------------------------
+// Sheet column layout for "Recruiter Communication Log and Call Schedule"
+// ---------------------------------------------------------------------------
+const SHEET_COLUMNS = [
+  "Recruiter Name",            // A
+  "Recruiter Email",           // B
+  "Recruiter Tel",             // C
+  "Company/Role",              // D
+  "First Contact",             // E
+  "Subsequent Contact(s)",     // F
+  "Recruiter Call Scheduled",  // G
+  "Company Contact Info",      // H
+  "Company First Interview",   // I
+  "Company Second Interview",  // J
+];
+
+const SHEET_RANGE = "Sheet1";
+
+// ---------------------------------------------------------------------------
+// Tool: log_recruiter_contact
+// ---------------------------------------------------------------------------
+server.registerTool(
+  "log_recruiter_contact",
+  {
+    description:
+      "Log or update recruiter contact info in the tracking spreadsheet. " +
+      "If a row already exists for the same recruiterEmail + companyRole, it " +
+      "updates the existing row (merging non-empty fields). Otherwise appends " +
+      "a new row. Use for Category B emails after classification.",
+    inputSchema: {
+      account: accountSchema,
+      recruiterName: z.string().describe("Recruiter's full name"),
+      recruiterEmail: z.string().describe("Recruiter's email address"),
+      recruiterTel: z
+        .string()
+        .optional()
+        .describe("Recruiter's phone number, if mentioned in the email"),
+      companyRole: z
+        .string()
+        .describe("Company name and role the recruiter seeks to fill"),
+      firstContact: z
+        .string()
+        .describe("Date/time of first contact (from the email's Date header)"),
+      subsequentContacts: z
+        .string()
+        .optional()
+        .describe("Any follow-up contact context mentioned in the email"),
+      recruiterCallScheduled: z
+        .string()
+        .optional()
+        .describe(
+          "Scheduled call details: date, time, platform (Zoom/Teams), " +
+          "meeting link or phone, and whether they have your cell number"
+        ),
+      companyContactInfo: z
+        .string()
+        .optional()
+        .describe("Company interviewer name/email/tel if advancing to company interview"),
+      companyFirstInterview: z
+        .string()
+        .optional()
+        .describe("Company first interview: date, time, platform, link/phone, cell number note"),
+      companySecondInterview: z
+        .string()
+        .optional()
+        .describe("Company second interview: date, time, platform, link/phone, cell number note"),
+    },
+  },
+  async ({
+    account,
+    recruiterName,
+    recruiterEmail,
+    recruiterTel,
+    companyRole,
+    firstContact,
+    subsequentContacts,
+    recruiterCallScheduled,
+    companyContactInfo,
+    companyFirstInterview,
+    companySecondInterview,
+  }) => {
+    try {
+      const sheets = getSheetsClient(account);
+      const spreadsheetId = getSpreadsheetId(account);
+
+      const incomingRow = [
+        recruiterName,
+        recruiterEmail,
+        recruiterTel ?? "",
+        companyRole,
+        firstContact,
+        subsequentContacts ?? "",
+        recruiterCallScheduled ?? "",
+        companyContactInfo ?? "",
+        companyFirstInterview ?? "",
+        companySecondInterview ?? "",
+      ];
+
+      // Read existing data to check for a matching row
+      const existing = await sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range: SHEET_RANGE,
+      });
+      const rows = existing.data.values ?? [];
+
+      // Find row matching recruiterEmail (col B) + companyRole (col D)
+      const emailNorm = recruiterEmail.toLowerCase().trim();
+      const roleNorm = companyRole.toLowerCase().trim();
+      let matchIdx = -1;
+      for (let i = 0; i < rows.length; i++) {
+        const rowEmail = (rows[i][1] ?? "").toString().toLowerCase().trim();
+        const rowRole = (rows[i][3] ?? "").toString().toLowerCase().trim();
+        if (rowEmail === emailNorm && rowRole === roleNorm) {
+          matchIdx = i;
+          break;
+        }
+      }
+
+      if (matchIdx >= 0) {
+        // Merge: keep existing values where incoming is empty
+        const existingRow = rows[matchIdx];
+        const merged = incomingRow.map((val, col) => {
+          if (col === 5 && val && existingRow[col]) {
+            // Subsequent Contacts: append rather than overwrite
+            return `${existingRow[col]}; ${val}`;
+          }
+          return val || existingRow[col] || "";
+        });
+
+        const rowNum = matchIdx + 1; // 1-indexed
+        await sheets.spreadsheets.values.update({
+          spreadsheetId,
+          range: `${SHEET_RANGE}!A${rowNum}:J${rowNum}`,
+          valueInputOption: "USER_ENTERED",
+          requestBody: { values: [merged] },
+        });
+
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: `Updated existing row ${rowNum} for ${recruiterName} / ${companyRole}.`,
+            },
+          ],
+        };
+      }
+
+      // No match — append new row
+      await sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range: SHEET_RANGE,
+        valueInputOption: "USER_ENTERED",
+        requestBody: { values: [incomingRow] },
+      });
+
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: `Appended new row for ${recruiterName} / ${companyRole}.`,
+          },
+        ],
+      };
+    } catch (error) {
+      const errMsg = error instanceof Error ? error.message : String(error);
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: `Error logging recruiter contact: ${errMsg}`,
+          },
+        ],
+      };
+    }
+  }
+);
+
+// ---------------------------------------------------------------------------
+// Tool: create_calendar_event
+// ---------------------------------------------------------------------------
+server.registerTool(
+  "create_calendar_event",
+  {
+    description:
+      "Create a Google Calendar event. Use immediately after logging a " +
+      "recruiter call, company first interview, or company second interview " +
+      "to the spreadsheet. One calendar event per scheduling column populated.",
+    inputSchema: {
+      account: accountSchema,
+      title: z
+        .string()
+        .describe(
+          "Event title, e.g. '[Recruiter Call] Acme Corp - Sr Engineer' " +
+          "or '[Interview] Acme Corp - Sr Engineer'"
+        ),
+      startDateTime: z
+        .string()
+        .describe("Event start in ISO 8601 format, e.g. 2026-02-20T14:00:00-06:00"),
+      durationMinutes: z
+        .number()
+        .min(5)
+        .max(480)
+        .optional()
+        .describe("Duration in minutes (default 60)"),
+      description: z
+        .string()
+        .optional()
+        .describe(
+          "Event description: recruiter/company contact info, notes, " +
+          "whether they have your cell number, etc."
+        ),
+      location: z
+        .string()
+        .optional()
+        .describe("Video meeting link (Zoom/Teams URL) or phone number"),
+    },
+  },
+  async ({ account, title, startDateTime, durationMinutes, description, location }) => {
+    try {
+      const calendar = getCalendarClient(account);
+      const calendarId = getCalendarId(account);
+
+      const start = new Date(startDateTime);
+      const end = new Date(start.getTime() + (durationMinutes ?? 60) * 60_000);
+
+      const event = await calendar.events.insert({
+        calendarId,
+        requestBody: {
+          summary: title,
+          start: {
+            dateTime: start.toISOString(),
+          },
+          end: {
+            dateTime: end.toISOString(),
+          },
+          description: description ?? "",
+          location: location ?? "",
+        },
+      });
+
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text:
+              `Created calendar event: "${title}"\n` +
+              `Start: ${start.toISOString()}\n` +
+              `End: ${end.toISOString()}\n` +
+              `Event ID: ${event.data.id}\n` +
+              `Link: ${event.data.htmlLink}`,
+          },
+        ],
+      };
+    } catch (error) {
+      const errMsg = error instanceof Error ? error.message : String(error);
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: `Error creating calendar event: ${errMsg}`,
           },
         ],
       };

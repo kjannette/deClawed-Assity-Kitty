@@ -6,18 +6,43 @@ import readline from "readline";
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 const CREDENTIALS_PATH = path.join(PROJECT_ROOT, "credentials.json");
-const TOKEN_PATH = path.join(PROJECT_ROOT, "token.json");
+const ACCOUNTS_PATH = path.join(PROJECT_ROOT, "accounts.json");
 
-// Gmail modify scope: read, send, delete, and manage labels
-const SCOPES = ["https://www.googleapis.com/auth/gmail.modify"];
+const SCOPES = [
+  "https://www.googleapis.com/auth/gmail.modify",
+  "https://www.googleapis.com/auth/spreadsheets",
+  "https://www.googleapis.com/auth/calendar.events",
+];
+
+function resolveTokenPath(accountKey: string): string {
+  if (!fs.existsSync(ACCOUNTS_PATH)) {
+    throw new Error(`Missing ${ACCOUNTS_PATH}. Create accounts.json first.`);
+  }
+  const accounts = JSON.parse(fs.readFileSync(ACCOUNTS_PATH, "utf-8"));
+  const acct = accounts[accountKey];
+  if (!acct) {
+    const available = Object.keys(accounts).join(", ");
+    throw new Error(
+      `Unknown account "${accountKey}". Available: ${available}`
+    );
+  }
+  return path.join(PROJECT_ROOT, acct.tokenFile);
+}
 
 async function authorize(): Promise<void> {
+  const accountKey = process.argv[2] || "work";
+  const tokenPath = resolveTokenPath(accountKey);
+
+  console.log(`Authorizing account: "${accountKey}"`);
+  console.log(`Token file: ${tokenPath}`);
+  console.log(`Scopes: ${SCOPES.join(", ")}\n`);
+
   if (!fs.existsSync(CREDENTIALS_PATH)) {
     console.error(
       `Missing ${CREDENTIALS_PATH}\n\n` +
         "To create this file:\n" +
         "1. Go to https://console.cloud.google.com/\n" +
-        "2. Create a project and enable the Gmail API\n" +
+        "2. Create a project and enable the Gmail, Sheets, and Calendar APIs\n" +
         "3. Create OAuth 2.0 credentials (Desktop app type)\n" +
         "4. Download the JSON and save it as credentials.json in the project root\n"
     );
@@ -34,16 +59,18 @@ async function authorize(): Promise<void> {
     redirect_uris[0]
   );
 
-  // Check if we already have a valid token
-  if (fs.existsSync(TOKEN_PATH)) {
-    const token = JSON.parse(fs.readFileSync(TOKEN_PATH, "utf-8"));
+  if (fs.existsSync(tokenPath)) {
+    const token = JSON.parse(fs.readFileSync(tokenPath, "utf-8"));
     oAuth2Client.setCredentials(token);
-    console.log("Token already exists at:", TOKEN_PATH);
-    console.log("To re-authorize, delete token.json and run this script again.");
+    console.log("Token already exists at:", tokenPath);
+    console.log(
+      "To re-authorize with new scopes, delete the token file and run again:\n" +
+        `  rm ${tokenPath}\n` +
+        `  npm run auth -- ${accountKey}`
+    );
     return;
   }
 
-  // Generate auth URL and prompt user
   const authUrl = oAuth2Client.generateAuthUrl({
     access_type: "offline",
     scope: SCOPES,
@@ -69,7 +96,6 @@ async function authorize(): Promise<void> {
     );
   });
 
-  // Extract the code whether they pasted the full URL or just the code
   let code = rawInput;
   if (rawInput.includes("code=")) {
     const url = new URL(rawInput);
@@ -81,8 +107,8 @@ async function authorize(): Promise<void> {
   const { tokens } = await oAuth2Client.getToken(code);
   oAuth2Client.setCredentials(tokens);
 
-  fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokens, null, 2));
-  console.log("\nToken saved to:", TOKEN_PATH);
+  fs.writeFileSync(tokenPath, JSON.stringify(tokens, null, 2));
+  console.log("\nToken saved to:", tokenPath);
   console.log("You can now start the MCP server.");
 }
 
