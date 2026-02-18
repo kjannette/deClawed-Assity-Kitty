@@ -32,11 +32,10 @@ vi.mock("../../src/loaders/prompt-config-loaders.js", () => {
     loadAccounts: () => testAccounts,
     getTokenPath: () => "/tmp/fake-token.json",
     getSummaryPath: (account: string) => {
-      // tmpDir is set in beforeAll, but this is called lazily so it's fine
       const base = tmpDir || os.tmpdir();
       return account === "work"
-        ? path.join(base, "summary.json")
-        : path.join(base, `summary-${account}.json`);
+        ? path.join(base, "mailSummaries", "summary.json")
+        : path.join(base, "mailSummaries", `summary-${account}.json`);
     },
     loadClassificationPrompt: () => "CLASSIFY EACH EMAIL AS A, B, C, OR D.",
     loadActionPrompt: () => "PHASE 2 INSTRUCTIONS HERE.",
@@ -87,6 +86,7 @@ async function callTool(name: string, args: Record<string, unknown>) {
 describe("Phase 1: Email Review Workflow", () => {
   beforeAll(async () => {
     tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "mcp-test-"));
+    fs.mkdirSync(path.join(tmpDir, "mailSummaries"), { recursive: true });
     await connectClient();
   });
 
@@ -235,8 +235,7 @@ describe("Phase 1: Email Review Workflow", () => {
       expect(text).toContain("Appended 2 entry/entries to summary.");
       expect(text).toContain("Total entries in summary: 2");
 
-      // Verify the file was actually written
-      const summaryPath = path.join(tmpDir, "summary.json");
+      const summaryPath = path.join(tmpDir, "mailSummaries", "summary.json");
       const written = JSON.parse(fs.readFileSync(summaryPath, "utf-8"));
       expect(written).toHaveLength(2);
       expect(written[0].senderName).toBe("Jane Smith");
@@ -246,7 +245,7 @@ describe("Phase 1: Email Review Workflow", () => {
     });
 
     it("purges entries older than 30 days", async () => {
-      const summaryPath = path.join(tmpDir, "summary.json");
+      const summaryPath = path.join(tmpDir, "mailSummaries", "summary.json");
       const oldDate = new Date(Date.now() - 31 * 24 * 60 * 60 * 1000).toISOString();
 
       // Seed with an old entry

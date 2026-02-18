@@ -8,5 +8,4 @@ token*.json
 accounts.json
 
 # Runtime output
-summary.json
-summary-secondary.json
+mailSummaries/

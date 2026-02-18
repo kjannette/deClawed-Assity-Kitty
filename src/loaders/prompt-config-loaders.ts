@@ -51,9 +51,9 @@ export const getTokenPath = (account: string): string => {
 
 export const getSummaryPath = (account: string): string => {
   if (account === "work") {
-    return path.join(PROJECT_ROOT, "summary.json");
+    return path.join(PROJECT_ROOT, "mailSummaries", "summary.json");
   }
-  return path.join(PROJECT_ROOT, `summary-${account}.json`);
+  return path.join(PROJECT_ROOT, "mailSummaries", `summary-${account}.json`);
 };
 
 export const VALID_ACCOUNTS = ["work", "secondary"] as const;
