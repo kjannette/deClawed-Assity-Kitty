@@ -740,10 +740,24 @@ server.registerTool(
   },
   async ({ account, title, startDateTime, durationMinutes, description, location }) => {
     try {
+      const start = new Date(startDateTime);
+
+      if (start.getTime() < Date.now()) {
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text:
+                `Skipped calendar event "${title}" — the proposed date ` +
+                `(${start.toISOString()}) is in the past.`,
+            },
+          ],
+        };
+      }
+
       const calendar = getCalendarClient(account);
       const calendarId = getCalendarId(account);
 
-      const start = new Date(startDateTime);
       const end = new Date(start.getTime() + (durationMinutes ?? 60) * 60_000);
 
       const event = await calendar.events.insert({

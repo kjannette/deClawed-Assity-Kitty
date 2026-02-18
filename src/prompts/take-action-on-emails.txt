@@ -38,6 +38,7 @@ When an email indicates advancement beyond the recruiter screen to a company int
 
 STRICT CONSTRAINTS:
 - Do not make up phone numbers, links, dates, or anything at all.  If it does not exist in text wihtin a verifiable email, IT DOES NOT EXIST.
+- PAST-DATE CHECK: Before creating a calendar event, compare the proposed meeting date/time against today's date. If the meeting date has already passed, do NOT create a calendar event for it. Still log it to the spreadsheet, but skip the calendar step. The tool will also enforce this server-side.
 - As described in more detail below, each new date/time value in a scheduling column = one new calendar event. Never skip this.
 - Always use the same account for calendar events as was used for email fetching.
 - Do not create duplicate calendar events for the same meeting.
