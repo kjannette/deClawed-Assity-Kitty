@@ -23,7 +23,7 @@ Immediately after logging to the spreadsheet, check whether ANY of these fields 
 - Company First Interview
 - Company Second Interview
 
-For EACH of the aboce fields that contains a date/time, create a Google Calendar event using the create_calendar_event tool:
+For EACH of the above fields that contains a date/time, create a Google Calendar event using the create_calendar_event tool:
 - Title format: "[<Recruiter NaME> Call] Company - Role" or "[First Interview] Company - Role" or "[Second Interview] Company - Role"
 - Start date/time: extracted from the email (convert to ISO 8601)
 - Duration: 30 minutes unless otherwise specified in the email
@@ -42,4 +42,3 @@ STRICT CONSTRAINTS:
 - Always use the same account for calendar events as was used for email fetching.
 - Do not create duplicate calendar events for the same meeting.
 - If information is not present in the email, leave that field empty do ot guess.
-
