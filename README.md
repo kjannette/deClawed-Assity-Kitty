@@ -9,7 +9,7 @@ Wanna cut the crap and get the good stuff into Jira, calendars, sheets, etc. ...
 
 ### (Cat) nip that sh*t in the bud!!!
 
-## The "why":
+# The "why":
 
 ###  Declawed is a configurable, prompt purrr-fectable LLM mail management assisty-kitty.
 ###  More private than most other options (not purrfect yet - but we aim to get there).
@@ -26,7 +26,8 @@ Avoid flakey (molty?) black box installs, billed as QUICK AND EASY!
 
 💩 You know lobsters eat poop, right? 💩
 
-# Declawed: **actually** easy, **demonstrably**  more effective
+# Simplicity
+### NLP prompts are **actually** easy and  **demonstrably**  more effective
 
 Stop drilling down byzantine menus in mail, scehduling and sheets platformsto 1. configure filters that only ever work 20% of the time 2. change in functionality and scope  every three months.
 
