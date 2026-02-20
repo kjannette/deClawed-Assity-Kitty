@@ -3,37 +3,39 @@
 </p>
 
 # Declawed: your kuddly assisty-kitty
+    Inbox brimming with stank-ass algorithmically-generated turds?
+    (Cat) nip that sh*t in the bud!!!
 
-## Inbox brimming with stank-ass algorithmically-generated turds?
-
-### (Cat) nip that sh*t in the bud!!!
+## The "why":
 
 ###  Declawed is a configurable, prompt purrr-fectable LLM mail management assisty-kitty.
-###  Puuurfect for tedious daily sorts/classification/responses
-###  Cuts down on the frustartion of feeling like you'll never get your paws on that catnip-stuffed mouse dangling from the string.
+###  Puuurfectly more private than the other options.
+###  More accurate actions/results (read on).
+###  Eliminates the frustrating feeling that you'll never get the dandlging, catnip-stuffed mouse you've been leaping at forever.
 
-# Privacy
-
-# More than the blue-plate crustacean
+# Privacy:  mMore than the blue-plate crustacean
 
 A local Model Context Protocol (MCP) server integrates with an LLM API you choose -- both of which offer greater ops and privacy control and transparency.
 
-# Avoid flakey (molty?) black box installs.
+Avoid flakey (molty?) black box installs, billed as QUICK AND EASY! 
+...also, loaded with more Trojans than an Olympic Village. Silent processes: data harvesting phone-homes, behavioral analytics reporting, telemetry backdoors - all the nasties crawling the dark detritus.  
+You know lobsters eat poop, right?
 
-Billed as QUICK AND EASY! ...loaded with  more Trojans than an Olympic Village.
-... Silent processes: data harvest phone-homes, behavioral analytic reporting, telemetry backdoors - all the nasties crawling the dark detritus.  You know lobsters eat poop, right?
+# Declawed: **actually** easy, **consistetly effective**
 
-# Declawed: **actually** easy
+Stop drilling down byzantine menus in mail, scehduling and sheets platforms to 1. configure filters that only ever work 30% of the time 2. change every three months.
 
-## Stop drilling byzantine menus in mail, scehduling and sheets pltforms to 1. configure filters that don't even work 2. change every three months
+Write simple, declarative prompts instead... they're like wrapping slop, bulk-mail's paws in tin foil and tossing them in the bathtub.
 
-## Short, declarative prompts are teh equivelent of wrapping slop, bulk-mail's feet in tin foil and tossing it in the bathtub.
+Prompts
+1. Use semantic grouping, organizing by kessage intent, purpose, and context.
+2. Our prompt templates are evaluated using, for exmaple, cosine similarity scoring and ROUGE scoring to
+3. Maxiinze keeping the gold and tossing the junk in rreviewing streams  where actionable insights are 10% of the signal/noise.
 
-###  Prompts are discerning, unlike filters.  For exaple, they keep the gold and bin the junk in forums/feeds where solid-gold insights are only 10% of the signal/noise.
 ### With refinement, prompting runs auto: cleaning that stank litter(in)box before you get a whiff.
 ### Morning greets you with a fresh, spring-meadow aroma of opportunities and insights -- not an avalanche of turds -- like its f*cxing 1998 again.
 
-# Kitty connex are simple
+# Wirign up your kitty is simple
 Assisty-kitty easily interfaces with mail and calendar and other app APIs (about any other service you want to plug in) ... it keeps things moving so you can go you chase your tail or take a 19-hour nap in a sunbeam.
 
 ---
