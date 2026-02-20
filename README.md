@@ -3,8 +3,11 @@
 </p>
 
 # Declawed: your kuddly assisty-kitty
-    Inbox brimming with stank-ass algorithmically-generated turds?
-    (Cat) nip that sh*t in the bud!!!
+
+Inbox brimming with stank-ass algorithmically-generated turds?
+Wanna cut the crap and get the good stuff into Jira, calendars, sheets, etc. ... in two clicks?
+
+### (Cat) nip that sh*t in the bud!!!
 
 ## The "why":
 
