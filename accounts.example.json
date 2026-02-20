@@ -1,0 +1,12 @@
+{
+  "work": {
+    "label": "",
+    "tokenFile": "token.json",
+    "spreadsheetId": "",
+    "calendarId": "primary"
+  },
+  "secondary": {
+    "label": "",
+    "tokenFile": "token-secondary.json"
+  }
+}
