@@ -12,10 +12,9 @@ export const PROJECT_ROOT = path.resolve(__dirname, "..", "..");
 const SECRETS_DIR = path.join(PROJECT_ROOT, "accountsAndCredentials");
 const CREDENTIALS_PATH = path.join(SECRETS_DIR, "credentials.json");
 const ACCOUNTS_PATH = path.join(SECRETS_DIR, "accounts.json");
-const CLASSIFY_PROMPT_PATH = path.join(PROJECT_ROOT, "classify-emails.txt");
-const ACTION_PROMPT_PATH = path.join(
-  PROJECT_ROOT, "src", "prompts", "take-action-on-emails.txt"
-);
+const PROMPTS_DIR = path.join(PROJECT_ROOT, "src", "prompts");
+const CLASSIFY_PROMPT_PATH = path.join(PROMPTS_DIR, "classify-emails.txt");
+const ACTION_PROMPT_PATH = path.join(PROMPTS_DIR, "take-action-on-emails.txt");
 
 // ---------------------------------------------------------------------------
 // Account configuration
