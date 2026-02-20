@@ -14,40 +14,40 @@ Wanna cut the crap and get the good stuff into Jira, calendars, sheets, etc. ...
 ###  Declawed is a configurable, prompt purrr-fectable LLM mail management assisty-kitty.
 ###  More private than most other options (not purrfect yet - but we aim to get there).
 ###  More accurate actions/results (read on).
-###  Eliminates that frustrating feeling you'll never get the dandlging, catnip-stuffed mouse you've been leaping at.
+###  Eliminates that frustrating feeling you'll never get the dangling, catnip-stuffed mouse you've been leaping at.
 
 # Privacy: more than the blue-plate crustacean
 
 Your own local Model Context Protocol (MCP) server integrates with your preferred LLM API.
 This means greater choice, transparency and ops control.
 
-Avoid flakey (molty?) black box installs, billed as QUICK AND EASY! 
-...also, loaded with more Trojans than an Olympic Village. Silent processes: data harvesting phone-homes, behavioral analytics reporting, telemetry backdoors - all the nasties crawling the dark detritus.  
+Avoid flakey (molty?) black box installs, billed as QUICK AND EASY!
+...also, loaded with more Trojans than an Olympic Village. Silent processes: data harvesting phone-homes, behavioral analytics reporting, telemetry backdoors - all the nasties crawling the dark detritus. 
 
 💩 You know lobsters eat poop, right? 💩
 
 # Simplicity
 ### NLP prompts are **actually** easy and  **demonstrably**  more effective
 
-Stop drilling down byzantine menus in mail, scehduling and sheets platformsto 1. configure filters that only ever work 20% of the time 2. change in functionality and scope  every three months.
+Stop drilling down byzantine menus in mail, scheduling and sheets platforms to 1. configure filters that only ever work 20% of the time 2. change in functionality and scope  every three months.
 
 Write simple, declarative prompts instead. It's like wrapping bulk-mail's paws in tin foil and tossing them in a bathtub.
 
 Prompts
 
 1. Use semantic grouping, organizing by message intent, purpose, and context.
-2. The prompt templates in our "built in" library are evaluated using, for exmaple, cosine similarity scoring and ROUGE scoring...
-3. Basically, we watch the watchers to max analyzational effectiveness in and correct choice of derlegated actions.
+2. The prompt templates in our "built in" library are evaluated using, for example, cosine similarity scoring and ROUGE scoring...
+3. Basically, we watch the watchers to max effective choice of delegated actions.
 3. An example: keep the gold, toss the junk when reviewing, for example,  forums where actionable insights are gold, but only 10% of the signal.
 
-### Prompting: easliy configured to cron: cleaning the litter(in)box before the stank wafts into the kitchen.
-### Image morning greeting you with the fresh, spring-meadow aroma of opportunities and insights -- not an avalanche of turds 
+### Prompting: easily configured to cron: cleaning the litter(in)box before the stank wafts into the kitchen.
+### Image morning greeting you with the fresh, spring-meadow aroma of opportunities and insights -- not an avalanche of turds
 
 # -- you just might feel like its f*cxing 1998 again.
 
 # Wiring up your kitty
 
-Assisty-kitty easily interfaces with mail and calendar and other app APIs (about any other service you want to plug in) ... it keeps things moving so you can go you chase laseer pointers or enjoy a 19-hour nap in a sunbeam.
+Assisty-kitty easily interfaces with mail and calendar and other app APIs (about any other service you want to plug in) ... it keeps things moving so you can go chase laser pointers or enjoy a 19-hour nap in a sunbeam.
 
 ---
 
@@ -62,7 +62,7 @@ Assisty-kitty easily interfaces with mail and calendar and other app APIs (about
 ## Coming soonish:
 -- Proprietary custom UI.
 -- Support for Hugging Face models galore.
--- Supposrt for wiring to local LLMs.
+- Support for wiring to local LLMs.
 
 # Setup
 
@@ -132,14 +132,14 @@ Create file `accounts.json` in the project root. Each key is an account alias wi
 ```json
 {
 "work": {
- "label": "you@yourdomain.com",
- "tokenFile": "token.json",
- "spreadsheetId": "YOUR_GOOGLE_SHEET_ID",
- "calendarId": "primary"
+"label": "you@yourdomain.com",
+"tokenFile": "token.json",
+"spreadsheetId": "YOUR_GOOGLE_SHEET_ID",
+"calendarId": "primary"
 },
 "secondary": {
- "label": "you@gmail.com",
- "tokenFile": "token-secondary.json"
+"label": "you@gmail.com",
+"tokenFile": "token-secondary.json"
 }
 }
 ```
@@ -202,12 +202,12 @@ Add the server:
 ```json
 {
 "mcpServers": {
- "assistant": {
-   "command": "/ABSOLUTE/PATH/TO/node",
-   "args": [
-     "/ABSOLUTE/PATH/TO/deClawed-Assity-Kitty/build/index.js"
-   ]
- }
+"assistant": {
+  "command": "/ABSOLUTE/PATH/TO/node",
+  "args": [
+    "/ABSOLUTE/PATH/TO/deClawed-Assity-Kitty/build/index.js"
+  ]
+}
 }
 }
 ```
@@ -231,15 +231,15 @@ The structure looks like this (the example file ships with empty values):
 
 ```json
 {
- "installed": {
-   "client_id": "",
-   "project_id": "",
-   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-   "token_uri": "https://oauth2.googleapis.com/token",
-   "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-   "client_secret": "",
-   "redirect_uris": ["http://localhost"]
- }
+"installed": {
+  "client_id": "",
+  "project_id": "",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_secret": "",
+  "redirect_uris": ["http://localhost"]
+}
 }
 ```
 
@@ -354,6 +354,14 @@ deClawed-Assity-Kitty/
 │       ├── tools-email.ts               # fetch, delete, append_to_summary
 │       ├── tools-calendar.ts            # create_calendar_event
 │       └── tools-spreadsheet.ts         # log_recruiter_contact
+├── accountsAndCredentials/
+│   ├── accounts.json                    # Multi-account configuration (gitignored)
+│   ├── accounts.example.json            # Template for accounts.json
+│   ├── credentials.json                 # Google OAuth client credentials (gitignored)
+│   ├── credentials.example.json         # Template for credentials.json
+│   ├── token.json                       # OAuth token -- work account (gitignored, auto-generated)
+│   ├── token-secondary.json             # OAuth token -- secondary account (gitignored, auto-generated)
+│   └── token.example.json              # Template showing token structure
 ├── test/
 │   ├── fixtures/
 │   │   └── mock-emails.ts              # Mock Gmail API responses
@@ -361,13 +369,14 @@ deClawed-Assity-Kitty/
 │   │   └── email-workflow.test.ts       # Integration tests
 │   └── unit/
 │       └── email-parsing.test.ts        # Unit tests for parsing helpers
-├── mailSummaries/                       # Per-account summary output (auto-generated)
+├── mailSummaries/                       # Per-account summary output (gitignored, auto-generated)
 ├── build/                               # Compiled JS (auto-generated)
-├── accounts.json                        # Multi-account configuration
-├── credentials.json                     # Google OAuth client credentials
-├── token*.json                          # Per-account OAuth tokens (auto-generated)
+├── assets/
+│   └── logo.png                         # Project logo
 ├── package.json
 ├── tsconfig.json
 ├── vitest.config.ts
+├── .gitignore
 └── README.md
 ```
+
