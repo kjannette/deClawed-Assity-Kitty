@@ -4,46 +4,43 @@
 
 # Declawed: your kuddly assisty-kitty
 
-Inbox brimming with stank-ass algorithmically-generated turds?
-Wanna cut the crap and get the good stuff into Jira, calendars, sheets, etc. ... in two clicks?
+Inbox brimming with stank, algorithmically-generated logs?  Wanna cut the crap and get the stuff that matters into your calendars, Atlassian, Jira, Asana, G sheets (etc., etc.) ... in two clicks?
 
-### (Cat) nip that sh*t in the bud!!!
+### (Cat) nip it in the bud!!
 
 # The "why":
 
-###  Declawed is a configurable, prompt purrr-fectable LLM mail management assisty-kitty.
-###  More private than most other options (not purrfect yet - but we aim to get there).
+###  Declawed is a configurable, prompt purrr-fectable LLM mail and task automation assisty-kitty.
+###  More private than other options (not purrfect *yet* - but privacy is our number one goal with every release).
 ###  More accurate actions/results (read on).
-###  Eliminates that frustrating feeling you'll never get the dangling, catnip-stuffed mouse you've been leaping at.
+###  Eliminates the frustrating feeling you'll never get the dangling, catnip-stuffed mouse you've been chasing all week
 
 # Privacy: more than the blue-plate crustacean
 
 Your own local Model Context Protocol (MCP) server integrates with your preferred LLM API.
-This means greater choice, transparency and ops control.
+Each step offers greater control, configurability and transparency over permissions.
 
-Avoid flakey (molty?) black box installs, billed as QUICK AND EASY!
-...also, loaded with more Trojans than an Olympic Village. Silent processes: data harvesting phone-homes, behavioral analytics reporting, telemetry backdoors - all the nasties crawling the dark detritus. 
+Avoid the flakey (molty?) black-box installs that are loaded with more Trojans than an Olympic Village. Silent/dark processes, data harvesting phone-homes, behavioral analytics, telemetry backdoors - the nasties lurking in the dark detritus.
 
 💩 You know lobsters eat poop, right? 💩
 
 # Simplicity
 ### NLP prompts are **actually** easy and  **demonstrably**  more effective
 
-Stop drilling down byzantine menus in mail, scheduling and sheets platforms to 1. configure filters that only ever work 20% of the time 2. change in functionality and scope  every three months.
+Stop drilling down byzantine menus in mail, scheduling and workflow platforms to configure filters and actions  that 1. only ever work 20% of the time 2. change in functionality and scope every two months.
 
-Write simple, declarative prompts instead. It's like wrapping bulk-mail's paws in tin foil and tossing them in a bathtub.
+Write short, declarative prompts instead. It's like wrapping busywork's paws in tinfoil and tossing it in a bathtub.
 
 Prompts
 
 1. Use semantic grouping, organizing by message intent, purpose, and context.
-2. The prompt templates in our "built in" library are evaluated using, for example, cosine similarity scoring and ROUGE scoring...
-3. Basically, we watch the watchers to max effective choice of delegated actions.
-3. An example: keep the gold, toss the junk when reviewing, for example,  forums where actionable insights are gold, but only 10% of the signal.
+2. The prompt templates in our "built in" library are evaluated using, for example, cosine similarity, ROUGE scoring and real human feedback.
+3. For example: you'll consistently keep the treasure and trash the junk when you task deClawed with reviewing forums/feeds where actionable insights are gold, but only 10% of the signal.
 
-### Prompting: easily configured to cron: cleaning the litter(in)box before the stank wafts into the kitchen.
-### Image morning greeting you with the fresh, spring-meadow aroma of opportunities and insights -- not an avalanche of turds
+### Prompting: easily configured to cron: cleaning the litter(in)box before the stank wafts into the whole house.
+### Imagine your morning inbox or summaries brimming with a fresh, spring-meadow aroma of opportunity and insight -- not last night's litter.
 
-# -- you just might feel like its f*cxing 1998 again.
+# -- You just might feel like it' s freakin' 1998 again.
 
 # Wiring up your kitty
 
@@ -203,10 +200,10 @@ Add the server:
 {
 "mcpServers": {
 "assistant": {
-  "command": "/ABSOLUTE/PATH/TO/node",
-  "args": [
-    "/ABSOLUTE/PATH/TO/deClawed-Assity-Kitty/build/index.js"
-  ]
+ "command": "/ABSOLUTE/PATH/TO/node",
+ "args": [
+   "/ABSOLUTE/PATH/TO/deClawed-Assity-Kitty/build/index.js"
+ ]
 }
 }
 }
@@ -232,13 +229,13 @@ The structure looks like this (the example file ships with empty values):
 ```json
 {
 "installed": {
-  "client_id": "",
-  "project_id": "",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_secret": "",
-  "redirect_uris": ["http://localhost"]
+ "client_id": "",
+ "project_id": "",
+ "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+ "token_uri": "https://oauth2.googleapis.com/token",
+ "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+ "client_secret": "",
+ "redirect_uris": ["http://localhost"]
 }
 }
 ```
@@ -379,4 +376,3 @@ deClawed-Assity-Kitty/
 ├── .gitignore
 └── README.md
 ```
-
