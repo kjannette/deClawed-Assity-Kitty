@@ -10,10 +10,10 @@ Inbox brimming with stank, algorithmically-generated logs?  Wanna cut the crap a
 
 # The "why"
 
-###  Declawed is a configurable, prompt purrr-fectable LLM mail and task automation assisty-kitty.
-###  More private than other options (not purrfect *yet* - but privacy is the goal with each new release).
-###  More accurate actions/results (read on).
-###  Eliminates the frustrating feeling you'll never get the dangling, catnip-stuffed mouse you've been chasing all week.
+Declawed is a configurable, prompt purrr-fectable LLM mail and task automation assisty-kitty.
+More private than other options (not purrfect *yet* - but privacy is the goal with each new release).
+More accurate actions/results (read on).
+Eliminates the frustrating feeling you'll never get the dangling, catnip-stuffed mouse you've been chasing all week.
 
 # Kitty Privacy: more than the blue-plate crustacean
 
@@ -24,8 +24,8 @@ Inbox brimming with stank, algorithmically-generated logs?  Wanna cut the crap a
 Avoid flakey (molty?) black-box installs that are loaded with more Trojans than an Olympic Village. Dark processes, data harvesting phone-homes, behavioral analytics, telemetry backdoors - the nasties crawling the detritus.
 
 ### Configure your own local Model Context Protocol (MCP) server, the basics are baked in, right here.
-## Integrate it with your preferred LLM API, or, better yet, local model.
-## Hello - greater control, configurability and transparency over the perms.
+Integrate it with your preferred LLM API, or, better yet, local model.
+Hello - greater control, configurability and transparency over the perms.
 
 # Simplicity
 
