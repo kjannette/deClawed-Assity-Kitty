@@ -13,9 +13,9 @@ Inbox brimming with stank, algorithmically-generated logs?  Wanna cut the crap a
 ###  Declawed is a configurable, prompt purrr-fectable LLM mail and task automation assisty-kitty.
 ###  More private than other options (not purrfect *yet* - but privacy is our number one goal with every release).
 ###  More accurate actions/results (read on).
-###  Eliminates the frustrating feeling you'll never get the dangling, catnip-stuffed mouse you've been chasing all week
+###  Eliminates the frustrating feeling you'll never get the dangling, catnip-stuffed mouse you've been chasing all week.
 
-# Privacy: more than the blue-plate crustacean
+# Kitty Privacy: more than the blue-plate crustacean
 
 💩 You know crustacean are detritivores, right? 💩
 
