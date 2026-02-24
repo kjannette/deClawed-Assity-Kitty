@@ -4,7 +4,7 @@
 
 # Declawed: your kuddly assisty-kitty
 
-Inbox brimming with stank, algorithmically-generated logs?  Wanna cut the crap and get the stuff that matters into your calendars, Atlassian, Jira, Asana, G sheets (etc., etc.) ... in two clicks?
+Inbox brimming with stank, algorithmically-generated logs?  Wanna cut the crap and get the stuff that matters into your calendars, Atlassian, Jira, Asana, G sheets (etc., etc.) ... in a couple'a clicks?
 
 ### (Cat) nip it in the bud!!
 
