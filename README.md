@@ -59,9 +59,8 @@ Assisty-kitty easily interfaces with mail, calendar and other workflow app APIs 
 -- A commercial or self-hosted SMTP Server
 
 ## Coming soonish:
--- Proprietary custom UI.
--- Support for Hugging Face models galore.
-- Support for wiring to local LLMs.
+-- Proprietary UI.
+-- Support for Hugging Face and other local models, galore.
 
 # Setup
 
