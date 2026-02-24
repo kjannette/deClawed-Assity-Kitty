@@ -38,8 +38,8 @@ Banish drilling down byzantine menus in mail, scheduling and workflow platforms 
 # Prompt Composition and Processing
 
 1. Use semantic grouping, organizing by message intent, purpose, and context.
-2. The prompt templates in the "built in" library are evaluated using, for example, cosine similarity, ROUGE scoring and actual human feedback.
-3. For example: you'll consistently keep the treasure and trash the junk when you task deClawed with reviewing forums/feeds where actionable insights are gold, but only 10% of the signal.
+2. The prompt templates in the "built in" library are evaluated using, mple, cosine similarity, ROUGE scoring and actual human feedback.
+3. Real talk/real world exmaple: you'll consistently keep the treasure and trash the junk when you prompt your Kitty to forums/feeds where actionable insights are gold, but only 10% of the signal/noise.
 
 ### Prompt jobbing: it's easily configured, cleaning the todo/litter(in)box before the stank wafts into the whole house.
 ### Imagine your morning brimming with crisp, concise summaries, and the trash already at the curb.  
