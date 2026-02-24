@@ -17,9 +17,9 @@ Eliminates the frustrating feeling you'll never get the dangling, catnip-stuffed
 
 # Kitty Privacy: more than the blue-plate crustacean
 
-💩 You know crustacean are detritivores, right? 💩
+💩 You know crustaceans are detritivores, right? 💩
 
-💩 If you're not dead, or poop, why be careless about access to your *P4*? 💩
+💩 So, if you're not dead, or poop, why be careless about access to your *P4*? 💩
 
 Avoid flakey (molty?) black-box installs that are loaded with more Trojans than an Olympic Village. Dark processes, data harvesting phone-homes, behavioral analytics, telemetry backdoors - the nasties crawling the detritus.
 
