@@ -17,14 +17,16 @@ Eliminates the frustrating feeling you'll never get the dangling, catnip-stuffed
 
 # Kitty Privacy: more than the blue-plate crustacean
 
+### Configure your own local Model Context Protocol (MCP) server.  It's easy. The basics are baked into this Kitty.
+
 💩 You know crustaceans are detritivores, right? 💩
 
 💩 So, if you're not dead, or poop, why be careless about access to your *P4*? 💩
 
 Avoid flakey (molty?) black-box installs that are loaded with more Trojans than an Olympic Village. Dark processes, data harvesting phone-homes, behavioral analytics, telemetry backdoors - the nasties crawling the detritus.
 
-### Configure your own local Model Context Protocol (MCP) server, the basics are baked in, right here.
 Integrate it with your preferred LLM API, or, better yet, local model.
+
 Hello - greater control, configurability and transparency over the perms.
 
 # Simplicity
