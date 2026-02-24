@@ -41,8 +41,9 @@ Banish drilling down byzantine menus in mail, scheduling and workflow platforms 
 2. The prompt templates in the "built in" library are evaluated using, for example, cosine similarity, ROUGE scoring and actual human feedback.
 3. For example: you'll consistently keep the treasure and trash the junk when you task deClawed with reviewing forums/feeds where actionable insights are gold, but only 10% of the signal.
 
-### Prompting: easily configured to cron: cleaning the litter(in)box before the stank wafts into the whole house.
-### Imagine your morning inbox or summaries brimming with a fresh, spring-meadow aroma of opportunity and insight -- not last night's litter.
+### Prompt jobbing: it's easily configured, cleaning the todo/litter(in)box before the stank wafts into the whole house.
+### Imagine your morning brimming with crisp, concise summaries, and the trash already at the curb.  
+### It's a fresh, spring-meadow aroma of mindful insight -- not last night's litter.
 
 # -- You just might feel like it' s freakin' 1998 again.
 
